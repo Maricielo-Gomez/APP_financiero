@@ -11,9 +11,9 @@ Original file is located at
 # Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez
 # Descripción: App que determina el perfil del inversor y analiza acciones con Python.
 
-# pip install streamlit yfinance
+pip install streamlit yfinance
 
-# pip install streamlit-option-menu
+pip install streamlit-option-menu
 
 # Importar librerias ----
 import streamlit as st #Interfaz intercativo
@@ -58,132 +58,283 @@ elif seleccion == "Perfil de inversor":
 
     puntaje_total = 0
 
-    st.subheader("I. Tolerancia al riesgo (Tu Reacción a la volatilidad)")
+    # --- SECCIÓN I: TOLERANCIA AL RIESGO ---
+    st.subheader("I. Tolerancia al riesgo (Tu reacción a la volatilidad)")
 
-    # Pregunta 1: Reacción a la Pérdida
     q1 = st.radio(
-        "1. Si su portafolio cayera un 20% en un mes, usted...",
-        ('A) Vendería inmediatamente, no tolero más pérdidas. (1 punto)',
-        'B) Mantendría la inversión, esperando la recuperación. (3 puntos)',
-        'C) Invertiría más para aprovechar los precios bajos. (5 puntos)'),
-        index=None  # Sin selección por defecto
+        "1. Si tus acciones cayeran un 20% en un mes, tú...",
+        [
+            "Venderías todo para evitar más pérdidas.",
+            "Mantendrías la posición esperando la recuperación.",
+            "Aumentarías tu inversión aprovechando los precios bajos."
+        ],
+        index=None
     )
     if q1:
-        puntaje_total += int(q1.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["Venderías" in q1, "Mantendrías" in q1, "Aumentarías" in q1].index(True)]
 
-    # Pregunta 2: Prioridad de inversión
     q2 = st.radio(
-    "2. ¿Qué es más importante para usted?",
-    ('A) Preservar el capital y obtener un retorno bajo pero seguro. (1 punto)',
-    'B) Equilibrio entre crecimiento y seguridad. (3 puntos)',
-    'C) Máximo rendimiento, aceptando un riesgo significativo. (5 puntos)'),
-    index=None
+        "2. ¿Qué priorizas al invertir?",
+        [
+            "Seguridad y estabilidad del capital.",
+            "Equilibrio entre crecimiento y seguridad.",
+            "Rendimiento alto, aceptando fluctuaciones fuertes."
+        ],
+        index=None
     )
     if q2:
-        puntaje_total += int(q2.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["Seguridad" in q2, "Equilibrio" in q2, "Rendimiento" in q2].index(True)]
 
-    # Pregunta 3: Volatilidad Aceptable
     q3 = st.radio(
-        "3. ¿Qué porcentaje de caída está dispuesto a aceptar en su capital en un año?",
-        ('A) Menos del 5%. (1 punto)',
-        'B) Entre 10% y 20%. (3 puntos)',
-        'C) Más del 25%. (5 puntos)'),
+        "3. ¿Qué nivel de caída podrías tolerar en un año?",
+        [
+            "Hasta 5%. Prefiero estabilidad.",
+            "Entre 10% y 20%. Entiendo que los mercados bajan.",
+            "Más del 25%. Asumo riesgos para buscar mayores retornos."
+        ],
         index=None
     )
     if q3:
-        puntaje_total += int(q3.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["5%" in q3, "10%" in q3, "25%" in q3].index(True)]
 
     st.markdown("---")
 
-    # --- SECCIÓN II: HORIZONTE DE INVERSIÓN (2 Preguntas) ---
-    st.subheader("II. Horizonte de Inversión (Plazo)")
+    # --- SECCIÓN II: HORIZONTE DE INVERSIÓN ---
+    st.subheader("II. Horizonte de inversión (Plazo)")
 
-    # Pregunta 4: Mayor Objetivo
     q4 = st.radio(
-    "4. ¿Para qué objetivo principal está destinando este dinero?",
-    ('A) Necesidades a corto plazo (1-3 años). (1 punto)',
-    'B) Mediano plazo (3-7 años). (3 puntos)',
-    'C) Largo plazo/Jubilación (más de 7 años). (5 puntos)'),
-    index=None
+        "4. ¿Con qué objetivo inviertes principalmente?",
+        [
+            "Necesidades o gastos en el corto plazo (1 a 3 años).",
+            "Ahorros para metas en el mediano plazo (3 a 7 años).",
+            "Construir patrimonio o jubilación (más de 7 años)."
+        ],
+        index=None
     )
     if q4:
-        puntaje_total += int(q4.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["corto" in q4, "mediano" in q4, "largo" in q4 or "más" in q4].index(True)]
 
-    # Pregunta 5: Momento de Retiro
     q5 = st.radio(
-    "5. ¿En cuántos años planea retirar la mayor parte de este capital?",
-    ('A) Menos de 2 años. (1 punto)',
-    'B) 5 a 10 años. (3 puntos)',
-    'C) Más de 15 años. (5 puntos)'),
-    index=None
+        "5. ¿Cuándo esperas usar la mayoría de tu capital invertido?",
+        [
+            "Antes de 2 años.",
+            "En 5 a 10 años.",
+            "En más de 15 años."
+        ],
+        index=None
     )
     if q5:
-        puntaje_total += int(q5.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["Antes" in q5, "5 a 10" in q5, "15" in q5].index(True)]
 
     st.markdown("---")
 
-    # --- SECCIÓN III: CONOCIMIENTO Y EXPERIENCIA (2 Preguntas) ---
-    st.subheader("III. Conocimiento y Experiencia")
+    # --- SECCIÓN III: CONOCIMIENTO Y EXPERIENCIA ---
+    st.subheader("III. Conocimiento y experiencia")
 
-    # Pregunta 6: Familiaridad con Métricas
     q6 = st.radio(
-    "6. ¿Qué tan familiarizado está con el Ratio de Sharpe o el Modelo CAPM?",
-    ('A) Nada familiarizado. (1 punto)',
-    'B) Entiendo los conceptos básicos. (3 puntos)',
-    'C) Los uso frecuentemente en mi análisis. (5 puntos)'),
-    index=None
+        "6. ¿Qué tan familiarizado estás con indicadores como el Ratio de Sharpe o el modelo CAPM?",
+        [
+            "No los conozco.",
+            "He escuchado de ellos y entiendo lo básico.",
+            "Los uso en mis análisis o estudios financieros."
+        ],
+        index=None
     )
     if q6:
-        puntaje_total += int(q6.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["No los conozco" in q6, "básico" in q6, "uso" in q6].index(True)]
 
-    # Pregunta 7: Experiencia con Instrumentos
     q7 = st.radio(
-    "7. ¿En qué tipos de activos ha invertido o analizado con frecuencia?",
-    ('A) Solo Cuentas de Ahorro, Depósitos (CDTs) y Fondos de inversión colectiva. (1 punto)',
-      'B) Acciones individuales (AAPL, MSFT) y Bonos. Entiendo la diversificación. (3 puntos)',
-      'C) Futuros, Opciones, Criptomonedas, o he usado Apalancamiento/Venta en Corto. (5 puntos)'),
-    index=None
+        "7. ¿En qué tipo de activos sueles invertir o analizar?",
+        [
+            "Solo cuentas de ahorro o fondos conservadores.",
+            "Acciones y bonos. Conozco los riesgos del mercado.",
+            "Acciones, derivados o criptomonedas. Manejo portafolios activos."
+        ],
+        index=None
     )
     if q7:
-        puntaje_total += int(q7.split('(')[-1].split()[0])
+        puntaje_total += [1, 3, 5][["ahorro" in q7, "Acciones y bonos" in q7, "criptomonedas" in q7].index(True)]
 
     st.markdown("---")
 
-        # --- BOTÓN Y CÁLCULO FINAL ---
-
-    # Se verifica que todas las preguntas hayan sido respondidas antes de permitir el cálculo
+    # --- RESULTADO ---
     preguntas_respondidas = all([q1, q2, q3, q4, q5, q6, q7])
 
-    if st.button("Calcular mi Perfil de Inversor"):
+    if st.button("Calcular mi perfil de inversión"):
         if preguntas_respondidas:
-
-            st.subheader("🎉 Resultado de tu Perfil de Inversor")
+            st.subheader("🎯 Resultado de tu perfil de inversión en acciones")
             st.metric("Puntuación Total", puntaje_total)
 
-            # Lógica de Clasificación del Perfil (Basada en 7-35 puntos)
             if puntaje_total <= 15:
-                perfil = "Conservador (Preservación del Capital)🛡️"
+                perfil = "Conservador 🛡️"
                 st.success(f"Tu perfil es: **{perfil}**")
-                st.write("Tu prioridad es la seguridad. Se recomienda invertir en activos de Renta Fija y baja volatilidad.")
-                st.session_state.perfil = "CONSERVADOR" # Initialize session state
+                st.write("Prefieres estabilidad. Te convienen acciones de empresas grandes y consolidadas (blue chips) y fondos indexados de bajo riesgo.")
+                st.session_state.perfil = "CONSERVADOR"
 
             elif puntaje_total <= 25:
-                perfil = "Moderado / Equilibrado (Crecimiento y Estabilidad) 🌿"
+                perfil = "Moderado 🌿"
                 st.info(f"Tu perfil es: **{perfil}**")
-                st.write("Buscas un balance. Se recomienda una cartera diversificada que combine renta fija y renta variable (Modelo Markowitz).")
-                st.session_state.perfil = "MODERADO" # Initialize session state
+                st.write("Buscas equilibrio. Puedes combinar acciones defensivas con sectores de crecimiento moderado.")
+                st.session_state.perfil = "MODERADO"
 
-            else: # puntaje_total > 25
-                perfil = "Arriesgado / Crecimiento (Máximo Rendimiento) 🔥"
+            else:
+                perfil = "Agresivo 🔥"
                 st.warning(f"Tu perfil es: **{perfil}**")
-                st.write("Tienes una alta tolerancia al riesgo y conocimiento. Se recomienda enfocarse en la eficiencia del portafolio (Ratio de Sharpe).")
-                st.session_state.perfil = "ARRIESGADO" # Initialize session state
+                st.write("Tienes alta tolerancia al riesgo. Podrías enfocarte en acciones de alto crecimiento, emergentes o tecnología, usando análisis de Sharpe o CAPM.")
+                st.session_state.perfil = "AGRESIVO"
 
         else:
-            st.error("Por favor, responde todas las preguntas para obtener tu resultado.")
+            st.error("Por favor responde todas las preguntas antes de calcular tu perfil.")
 
 elif seleccion == "Resultados":
     st.header("📈 Resultados del análisis")
+
+    if st.session_state.perfil is None:
+        st.error("🛑 Por favor, completa el **Cuestionario del Inversor** en la pestaña anterior para desbloquear la simulación.")
+    else:
+        st.success(f"Perfil Actual: **{st.session_state.perfil}**. ¡Configura tu simulación!")
+
+        st.subheader("Configuración de Acciones")
+        single_ticker = st.text_input(
+            "Ingrese **un único Ticker** para análisis individual (ej: AAPL, AMZN, GOOG, MSFT	)",
+            value=""
+        )
+
+        today = datetime.date.today()
+        three_years_ago = today - datetime.timedelta(days=3 * 365)
+
+        st.header("Selector de rango de Fechas Históricas")
+        d = st.date_input(
+            "Seleccione el período histórico para el análisis",
+            value=(three_years_ago, today),
+            min_value=datetime.date(1990, 1, 1),
+            max_value=today,
+            format="MM.DD.YYYY",
+        )
+        st.write("El rango seleccionado es:", d)
+
+        # Define num_activos based on whether a single ticker is entered
+        num_activos = 1 if single_ticker else 0
+
+        if st.button("Analicemos esta acción!"):
+            # Code to analyze the single ticker goes here
+            # For now, I'll just add a placeholder
+            st.write("Analizando:", single_ticker)
+
+
+        # Mostrar el botón de simulación solo si hay tickers ingresados
+        if num_activos > 0:
+            if st.button("Ejecutar Simulación de Portafolio"):
+
+                # Define get_data function
+                def get_data(tickers, start_date, end_date, benchmark_ticker="^GSPC"):
+                    """Downloads historical data for tickers and a benchmark."""
+                    data = yf.download(tickers, start=start_date, end=end_date)['Close']
+                    benchmark_data = yf.download(benchmark_ticker, start=start_date, end=end_date)['Close']
+                    return data, benchmark_data
+
+                # Define calculate_beta function
+                def calculate_beta(asset_returns, benchmark_returns):
+                    """Calculates beta for each asset against the benchmark."""
+                    betas = {}
+                    for column in asset_returns.columns:
+                        # Calculate covariance between asset and benchmark returns
+                        covariance = asset_returns[column].cov(benchmark_returns.iloc[:, 0])
+                        # Calculate variance of benchmark returns
+                        benchmark_variance = benchmark_returns.iloc[:, 0].var()
+                        # Calculate beta
+                        beta = covariance / benchmark_variance
+                        betas[column] = beta
+                    return betas
+
+                # Define MARKET_TICKER and RF
+                MARKET_TICKER = "^GSPC" # S&P 500 as benchmark
+                RF = 0.04 # Risk-Free Rate (example: 4%)
+
+
+                # Descarga de datos
+                try:
+                    tickers = [single_ticker] # Use the single_ticker for analysis
+                    start_date = d[0]
+                    end_date = d[1]
+
+                    datos, benchmark_data = get_data(tickers, start_date, end_date)
+
+                    if datos.empty:
+                        st.error("No se pudieron descargar los datos. Revise los símbolos de los tickers o el rango de fechas.")
+                    else:
+                        # CÁLCULOS BÁSICOS
+                        retornos = datos.pct_change().dropna()
+                        benchmark_retornos = benchmark_data.pct_change().dropna()
+
+                        # Asegurar alineación de retornos
+                        retornos = pd.merge(retornos, benchmark_retornos, left_index=True, right_index=True, how='inner').drop(columns=[MARKET_TICKER])
+                        benchmark_retornos = benchmark_retornos.loc[retornos.index]
+
+                        retorno_anual = retornos.mean() * 252
+                        volatilidad_anual = retornos.std() * np.sqrt(252)
+
+                        # --- CÁLCULO CAPM ---
+                        betas = calculate_beta(retornos, benchmark_retornos)
+                        # Retorno del Mercado (Rm) anualizado
+                        Rm = benchmark_retornos.mean().iloc[0] * 252
+
+                        # Calcular Retorno Esperado por CAPM: E[Ri] = Rf + Beta * (Rm - Rf)
+                        retorno_capm = {}
+                        for t, beta in betas.items():
+                            retorno_capm[t] = RF + beta * (Rm - RF)
+                        retorno_capm_series = pd.Series(retorno_capm)
+
+                        # Mostrar tabla de métricas individuales
+                        st.subheader("1. Métricas Individuales de Activos")
+
+                        # Cálculo del Ratio de Sharpe individual para la tabla
+                        sharpe_anual = (retorno_anual - RF) / volatilidad_anual
+
+                        metricas_df = pd.DataFrame({
+                            'Retorno Anual Esperado (Histórico)': retorno_anual.apply(lambda x: f"{x*100:.2f}%"),
+                            'Retorno Esperado (CAPM)': retorno_capm_series.apply(lambda x: f"{x*100:.2f}%"),
+                            'Volatilidad Anual (Riesgo)': volatilidad_anual.apply(lambda x: f"{x*100:.2f}%"),
+                            'Beta (vs. S&P 500)': pd.Series(betas).round(2),
+                            'Ratio de Sharpe': sharpe_anual.round(2)
+                        })
+
+                        # Reindexar la tabla para asegurar que el orden de los Tickers sea el mismo
+                        metricas_df = metricas_df.reindex(columns=['Retorno Anual Esperado (Histórico)', 'Retorno Esperado (CAPM)', 'Volatilidad Anual (Riesgo)', 'Beta (vs. S&P 500)', 'Ratio de Sharpe'])
+
+                        st.dataframe(metricas_df)
+
+
+                        st.subheader(f"2. Análisis del Portafolio (Basado en Perfil {st.session_state.perfil})")
+
+                        if num_activos == 1:
+                            # --- CÁLCULO PARA 1 ACCIÓN ---
+                            st.markdown("⚠️ **Solo se ingresó 1 activo:** El 'portafolio' es la acción individual. No hay beneficios de diversificación.")
+
+                            retorno_p = retorno_anual.iloc[0]
+                            volatilidad_p = volatilidad_anual.iloc[0]
+                            sharpe_p = sharpe_anual.iloc[0]
+
+                            col_ret, col_vol, col_sharpe = st.columns(3)
+
+                            with col_ret:
+                                st.metric("Retorno Esperado", f"{retorno_p*100:.2f}%")
+                            with col_vol:
+                                st.metric("Volatilidad (Riesgo)", f"{volatilidad_p*100:.2f}%")
+                            with col_sharpe:
+                                st.metric("Ratio de Sharpe", f"{sharpe_p:.2f}")
+
+                            # Gráfico de precios históricos para el análisis individual
+                            st.markdown("#### Evolución Histórica de Precios")
+                            # Para evitar el error de Streamlit si la descarga de datos devuelve una Serie,
+                            # nos aseguramos de que sea un DataFrame con el nombre de columna.
+                            if isinstance(datos, pd.Series):
+                                datos = datos.to_frame(name=single_ticker)
+                            st.line_chart(datos)
+
+
+                except Exception as e:
+                    st.error(f"Error during simulation: {e}")
 
 elif seleccion == "Configuración":
     st.header("⚙️ Configuración de usuario")
