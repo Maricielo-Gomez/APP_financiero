@@ -11,9 +11,9 @@ Original file is located at
 # Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez
 # Descripción: App que determina el perfil del inversor y analiza acciones con Python.
 
-# pip install streamlit yfinance
+pip install streamlit yfinance
 
-# pip install streamlit-option-menu
+pip install streamlit-option-menu
 
 # Importar librerias ----
 import streamlit as st #Interfaz intercativo
@@ -49,7 +49,6 @@ if seleccion == "Inicio":
     st.markdown("*Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez*")
 
 elif seleccion == "Perfil de inversor":
-    st.header("👤 Perfil del inversor")
 
     # 🧭 CUESTIONARIO DE PERFIL
     st.title("🧩 Cuestionario del inversor")
@@ -59,7 +58,7 @@ elif seleccion == "Perfil de inversor":
 
     puntaje_total = 0
 
-    st.header("I. Tolerancia al riesgo (Tu Reacción a la volatilidad)")
+    st.subheader("I. Tolerancia al riesgo (Tu Reacción a la volatilidad)")
 
     # Pregunta 1: Reacción a la Pérdida
     q1 = st.radio(
@@ -97,7 +96,7 @@ elif seleccion == "Perfil de inversor":
     st.markdown("---")
 
     # --- SECCIÓN II: HORIZONTE DE INVERSIÓN (2 Preguntas) ---
-    st.header("II. Horizonte de Inversión (Plazo)")
+    st.subheader("II. Horizonte de Inversión (Plazo)")
 
     # Pregunta 4: Mayor Objetivo
     q4 = st.radio(
@@ -124,7 +123,7 @@ elif seleccion == "Perfil de inversor":
     st.markdown("---")
 
     # --- SECCIÓN III: CONOCIMIENTO Y EXPERIENCIA (2 Preguntas) ---
-    st.header("III. Conocimiento y Experiencia")
+    st.subheader("III. Conocimiento y Experiencia")
 
     # Pregunta 6: Familiaridad con Métricas
     q6 = st.radio(
