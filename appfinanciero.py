@@ -11,9 +11,9 @@ Original file is located at
 # Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez
 # Descripción: App que determina el perfil del inversor y analiza acciones con Python.
 
-# pip install streamlit yfinance
+pip install streamlit yfinance
 
-# pip install streamlit-option-menu
+pip install streamlit-option-menu
 
 # Importar librerias ----
 import streamlit as st #Interfaz intercativo
@@ -149,6 +149,39 @@ elif seleccion == "Perfil de inversor":
         puntaje_total += int(q7.split('(')[-1].split()[0])
 
     st.markdown("---")
+
+        # --- BOTÓN Y CÁLCULO FINAL ---
+
+    # Se verifica que todas las preguntas hayan sido respondidas antes de permitir el cálculo
+    preguntas_respondidas = all([q1, q2, q3, q4, q5, q6, q7])
+
+    if st.button("Calcular mi Perfil de Inversor"):
+        if preguntas_respondidas:
+
+            st.subheader("🎉 Resultado de tu Perfil de Inversor")
+            st.metric("Puntuación Total", puntaje_total)
+
+            # Lógica de Clasificación del Perfil (Basada en 7-35 puntos)
+            if puntaje_total <= 15:
+                perfil = "Conservador (Preservación del Capital)🛡️"
+                st.success(f"Tu perfil es: **{perfil}**")
+                st.write("Tu prioridad es la seguridad. Se recomienda invertir en activos de Renta Fija y baja volatilidad.")
+                st.session_state.perfil = "CONSERVADOR" # Initialize session state
+
+            elif puntaje_total <= 25:
+                perfil = "Moderado / Equilibrado (Crecimiento y Estabilidad) 🌿"
+                st.info(f"Tu perfil es: **{perfil}**")
+                st.write("Buscas un balance. Se recomienda una cartera diversificada que combine renta fija y renta variable (Modelo Markowitz).")
+                st.session_state.perfil = "MODERADO" # Initialize session state
+
+            else: # puntaje_total > 25
+                perfil = "Arriesgado / Crecimiento (Máximo Rendimiento) 🔥"
+                st.warning(f"Tu perfil es: **{perfil}**")
+                st.write("Tienes una alta tolerancia al riesgo y conocimiento. Se recomienda enfocarse en la eficiencia del portafolio (Ratio de Sharpe).")
+                st.session_state.perfil = "ARRIESGADO" # Initialize session state
+
+        else:
+            st.error("Por favor, responde todas las preguntas para obtener tu resultado.")
 
 elif seleccion == "Resultados":
     st.header("📈 Resultados del análisis")
