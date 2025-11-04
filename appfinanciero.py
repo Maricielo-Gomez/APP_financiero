@@ -11,9 +11,9 @@ Original file is located at
 # Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez
 # Descripción: App que determina el perfil del inversor y analiza acciones con Python.
 
-# pip install streamlit yfinance
+pip install streamlit yfinance
 
-# pip install streamlit-option-menu
+pip install streamlit-option-menu
 
 # Importar librerias ----
 import streamlit as st #Interfaz intercativo
@@ -41,10 +41,114 @@ with st.sidebar:
 
 # Contenido dinámico
 if seleccion == "Inicio":
-    st.title("🏠 Bienvenido al simulador financiero")
+    st.title("🏠 Bienvenido a nuestra APP")
+    st.header("✨ Tu estilo, tu riesgo, tu inversión.")
+    st.markdown("""
+    Esta app te ayuda a identificar tu *perfil de inversor* y analizar el comportamiento de acciones reales.""")
+    st.markdown("Elige tus preferencias y descubre cómo se ajustan a los distintos tipos de portafolio.")
+    st.markdown("*Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez*")
 
-elif seleccion == "Simulación":
-    st.header("📊 Simulación de portafolio")
+elif seleccion == "Perfil de inversor":
+    st.header("👤 Perfil del inversor")
+
+    # 🧭 CUESTIONARIO DE PERFIL
+    st.title("🧩 Cuestionario del inversor")
+    st.header("👤 Descubre tu perfil de inversor")
+    st.markdown("Responde las siguientes preguntas para determinar tu tolerancia al riesgo, horizonte y conocimiento.")
+    st.markdown("---")
+
+    puntaje_total = 0
+
+    st.header("I. Tolerancia al riesgo (Tu Reacción a la volatilidad)")
+
+    # Pregunta 1: Reacción a la Pérdida
+    q1 = st.radio(
+        "1. Si su portafolio cayera un 20% en un mes, usted...",
+        ('A) Vendería inmediatamente, no tolero más pérdidas. (1 punto)',
+        'B) Mantendría la inversión, esperando la recuperación. (3 puntos)',
+        'C) Invertiría más para aprovechar los precios bajos. (5 puntos)'),
+        index=None  # Sin selección por defecto
+    )
+    if q1:
+        puntaje_total += int(q1.split('(')[-1].split()[0])
+
+    # Pregunta 2: Prioridad de inversión
+    q2 = st.radio(
+    "2. ¿Qué es más importante para usted?",
+    ('A) Preservar el capital y obtener un retorno bajo pero seguro. (1 punto)',
+    'B) Equilibrio entre crecimiento y seguridad. (3 puntos)',
+    'C) Máximo rendimiento, aceptando un riesgo significativo. (5 puntos)'),
+    index=None
+    )
+    if q2:
+        puntaje_total += int(q2.split('(')[-1].split()[0])
+
+    # Pregunta 3: Volatilidad Aceptable
+    q3 = st.radio(
+        "3. ¿Qué porcentaje de caída está dispuesto a aceptar en su capital en un año?",
+        ('A) Menos del 5%. (1 punto)',
+        'B) Entre 10% y 20%. (3 puntos)',
+        'C) Más del 25%. (5 puntos)'),
+        index=None
+    )
+    if q3:
+        puntaje_total += int(q3.split('(')[-1].split()[0])
+
+    st.markdown("---")
+
+    # --- SECCIÓN II: HORIZONTE DE INVERSIÓN (2 Preguntas) ---
+    st.header("II. Horizonte de Inversión (Plazo)")
+
+    # Pregunta 4: Mayor Objetivo
+    q4 = st.radio(
+    "4. ¿Para qué objetivo principal está destinando este dinero?",
+    ('A) Necesidades a corto plazo (1-3 años). (1 punto)',
+    'B) Mediano plazo (3-7 años). (3 puntos)',
+    'C) Largo plazo/Jubilación (más de 7 años). (5 puntos)'),
+    index=None
+    )
+    if q4:
+        puntaje_total += int(q4.split('(')[-1].split()[0])
+
+    # Pregunta 5: Momento de Retiro
+    q5 = st.radio(
+    "5. ¿En cuántos años planea retirar la mayor parte de este capital?",
+    ('A) Menos de 2 años. (1 punto)',
+    'B) 5 a 10 años. (3 puntos)',
+    'C) Más de 15 años. (5 puntos)'),
+    index=None
+    )
+    if q5:
+        puntaje_total += int(q5.split('(')[-1].split()[0])
+
+    st.markdown("---")
+
+    # --- SECCIÓN III: CONOCIMIENTO Y EXPERIENCIA (2 Preguntas) ---
+    st.header("III. Conocimiento y Experiencia")
+
+    # Pregunta 6: Familiaridad con Métricas
+    q6 = st.radio(
+    "6. ¿Qué tan familiarizado está con el Ratio de Sharpe o el Modelo CAPM?",
+    ('A) Nada familiarizado. (1 punto)',
+    'B) Entiendo los conceptos básicos. (3 puntos)',
+    'C) Los uso frecuentemente en mi análisis. (5 puntos)'),
+    index=None
+    )
+    if q6:
+        puntaje_total += int(q6.split('(')[-1].split()[0])
+
+    # Pregunta 7: Experiencia con Instrumentos
+    q7 = st.radio(
+    "7. ¿En qué tipos de activos ha invertido o analizado con frecuencia?",
+    ('A) Solo Cuentas de Ahorro, Depósitos (CDTs) y Fondos de inversión colectiva. (1 punto)',
+      'B) Acciones individuales (AAPL, MSFT) y Bonos. Entiendo la diversificación. (3 puntos)',
+      'C) Futuros, Opciones, Criptomonedas, o he usado Apalancamiento/Venta en Corto. (5 puntos)'),
+    index=None
+    )
+    if q7:
+        puntaje_total += int(q7.split('(')[-1].split()[0])
+
+    st.markdown("---")
 
 elif seleccion == "Resultados":
     st.header("📈 Resultados del análisis")
