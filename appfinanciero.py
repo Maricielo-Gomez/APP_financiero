@@ -11,9 +11,9 @@ Original file is located at
 # Desarrollado por: Alejandro Cañas, Emmanuel García, Maricielo Gómez
 # Descripción: App que determina el perfil del inversor y analiza acciones con Python.
 
-# pip install streamlit yfinance
+pip install streamlit yfinance
 
-# pip install streamlit-option-menu
+pip install streamlit-option-menu
 
 # Importar librerias ----
 import streamlit as st #Interfaz intercativo
@@ -32,7 +32,7 @@ if "perfil" not in st.session_state:
 with st.sidebar:
     seleccion = option_menu(
         "APP Financiero",
-        ["Inicio", "Perfil de inversor", "Simulación de portafolio - Una acción", "Simulación de portafolio - Dos o más acciones", "Referencias"],
+        ["Inicio", "Perfil de inversor", "Simulación de portafolio: Una acción", "Simulación de portafolio: Dos o más acciones", "Referencias"],
         icons=["house", "graph-up", "bar-chart", "gear"],
         menu_icon="cast",
         default_index=0,
@@ -186,15 +186,15 @@ elif seleccion == "Perfil de inversor":
         else:
             st.error("Por favor responde todas las preguntas antes de calcular tu perfil.")
 
-elif seleccion == "Resultados":
-    st.header("📈 Resultados del análisis")
+elif seleccion == "Simulación de portafolio: Una acción":
+    st.header("📈 Simulación de portafolio: Una acción")
 
     if st.session_state.perfil is None:
         st.error("🛑 Por favor, completa el **Cuestionario del Inversor** en la pestaña anterior para desbloquear la simulación.")
     else:
         st.success(f"Perfil Actual: **{st.session_state.perfil}**. ¡Configura tu simulación!")
 
-        st.subheader("Configuración de Acciones")
+        st.subheader("Selección de acción")
         single_ticker = st.text_input(
             "Ingrese **un único Ticker** para análisis individual (ej: AAPL, AMZN, GOOG, MSFT	)",
             value=""
